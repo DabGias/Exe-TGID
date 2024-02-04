@@ -1,5 +1,6 @@
 package gabriel.dias.exe.controllers;
 
+import java.math.BigDecimal;
 import java.util.Optional;
 
 import org.slf4j.Logger;
@@ -24,7 +25,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
+import gabriel.dias.exe.models.Company;
 import gabriel.dias.exe.models.Customer;
+import gabriel.dias.exe.repositories.CompanyRepository;
 import gabriel.dias.exe.repositories.CustomerRepository;
 import jakarta.validation.Valid;
 
@@ -35,6 +38,9 @@ public class CustomerController {
 
     @Autowired
     CustomerRepository repo;
+
+    @Autowired
+    CompanyRepository compRepo;
 
     @Autowired
     PagedResourcesAssembler<Customer> assembler;
@@ -66,6 +72,47 @@ public class CustomerController {
         repo.save(customer);
 
         return ResponseEntity.created(customer.toModel().getRequiredLink("self").toUri()).body(customer.toModel());
+    }
+
+    @PostMapping("/deposit/{id}")
+    public ResponseEntity<Company> deposit(@PathVariable Long id, @RequestBody double value) {
+        log.info("Value of deposit: " + value);
+
+        if (value < 0) return ResponseEntity.badRequest().build();
+
+        Optional<Company> company = compRepo.findById(id);
+
+        if (company.isEmpty()) return ResponseEntity.notFound().build();
+
+        company.get().setBalance(company.get().getBalance().add(new BigDecimal(value)));
+
+        compRepo.save(company.get());
+
+        return ResponseEntity.ok(company.get());
+    }
+
+    @PostMapping("/withdraw/{id}")
+    public ResponseEntity<Company> withdraw(@PathVariable Long id, @RequestBody double value) {
+        log.info("Value of deposit: " + value);
+
+        if (value < 0) return ResponseEntity.badRequest().build();
+
+        Optional<Company> company = compRepo.findById(id);
+
+        if (company.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        } else if (
+            (value - (value * (100 * company.get().getTax().doubleValue()))) > company.get().getBalance().doubleValue() 
+            || value > company.get().getBalance().doubleValue()
+        ) {
+            return ResponseEntity.badRequest().build();
+        }
+
+        company.get().setBalance(new BigDecimal(company.get().getBalance().doubleValue() - (value - (value * (100 * company.get().getTax().doubleValue())))));
+
+        compRepo.save(company.get());
+
+        return ResponseEntity.ok(company.get());
     }
 
     @PutMapping("{id}")
