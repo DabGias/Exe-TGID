@@ -76,7 +76,7 @@ public class CustomerController {
     }
 
     @PostMapping("/deposit/{id}")
-    public ResponseEntity<Company> deposit(@PathVariable Long id, @RequestParam double value) {
+    public ResponseEntity<Company> deposit(@PathVariable Long id, @RequestParam(required = true) double value) {
         log.info("Value of deposit: " + value);
 
         if (value < 0) return ResponseEntity.badRequest().build();
@@ -93,7 +93,7 @@ public class CustomerController {
     }
 
     @PostMapping("/withdraw/{id}")
-    public ResponseEntity<Company> withdraw(@PathVariable Long id, @RequestParam double value) {
+    public ResponseEntity<Company> withdraw(@PathVariable Long id, @RequestParam(required = true) double value) {
         log.info("Value of withdraw: " + value);
 
         if (value < 0) return ResponseEntity.badRequest().build();
