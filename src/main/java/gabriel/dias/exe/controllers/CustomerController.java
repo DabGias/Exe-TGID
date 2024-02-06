@@ -102,14 +102,11 @@ public class CustomerController {
 
         if (company.isEmpty()) {
             return ResponseEntity.notFound().build();
-        } else if (
-            (value - (value * (100 * company.get().getTax().doubleValue()))) > company.get().getBalance().doubleValue() 
-            || value > company.get().getBalance().doubleValue()
-        ) {
+        } else if (value > company.get().getBalance().doubleValue()) {
             return ResponseEntity.badRequest().build();
         }
 
-        company.get().setBalance(new BigDecimal(company.get().getBalance().doubleValue() - (value - (value * (100 * company.get().getTax().doubleValue())))));
+        company.get().setBalance(new BigDecimal(company.get().getBalance().doubleValue() - (value - (value * (company.get().getTax().doubleValue()) / 100))));
 
         compRepo.save(company.get());
 
