@@ -71,13 +71,6 @@ public class Company {
     
     public Company() {}
 
-    public Company(Long id, @NotBlank String name, @NotNull BigDecimal tax, @NotBlank @Pattern(regexp = "^\\d{2}\\.?\\d{3}\\.?\\d{3}\\/?\\d{4}\\-?\\d{2}$") String cnpj) {
-        this.id = id;
-        this.name = name;
-        this.tax = tax;
-        this.cnpj = cnpj;
-    }
-
     public Company(@NotBlank String name, @NotNull BigDecimal tax, @NotBlank @Pattern(regexp = "^\\d{2}\\.?\\d{3}\\.?\\d{3}\\/?\\d{4}\\-?\\d{2}$") String cnpj) {
         this.name = name;
         this.tax = tax;
@@ -135,6 +128,6 @@ public class Company {
 
     @Override
     public String toString() {
-        return "Company [id=" + id + ", name=" + name + ", balance=" + balance + ", cnpj=" + cnpj + "]";
+        return "Company [id=" + id + ", name=" + name + ", balance=" + balance + ", tax=" + tax + ", cnpj=" + cnpj + "]";
     }
 }

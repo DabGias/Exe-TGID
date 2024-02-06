@@ -82,14 +82,6 @@ public class Customer {
 
     public Customer() {}
 
-    public Customer(Long id, @NotBlank @Pattern(regexp = "^[A-Z][a-z].* [A-Z][a-z]+$") String name, @Email String email, @NotBlank @Pattern(regexp = "^\\d{3}\\.?\\d{3}\\.?\\d{3}\\-?\\d{2}$") String cpf, Company company) {
-        this.id = id;
-        this.name = name;
-        this.email = email;
-        this.cpf = cpf;
-        this.company = company;
-    }
-
     public Customer(@NotBlank @Pattern(regexp = "^[A-Z][a-z].* [A-Z][a-z]+$") String name, @Email String email, @NotBlank @Pattern(regexp = "^\\d{3}\\.?\\d{3}\\.?\\d{3}\\-?\\d{2}$") String cpf, Company company) {
         this.name = name;
         this.email = email;

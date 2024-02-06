@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -75,7 +76,7 @@ public class CustomerController {
     }
 
     @PostMapping("/deposit/{id}")
-    public ResponseEntity<Company> deposit(@PathVariable Long id, @RequestBody double value) {
+    public ResponseEntity<Company> deposit(@PathVariable Long id, @RequestParam double value) {
         log.info("Value of deposit: " + value);
 
         if (value < 0) return ResponseEntity.badRequest().build();
@@ -92,8 +93,8 @@ public class CustomerController {
     }
 
     @PostMapping("/withdraw/{id}")
-    public ResponseEntity<Company> withdraw(@PathVariable Long id, @RequestBody double value) {
-        log.info("Value of deposit: " + value);
+    public ResponseEntity<Company> withdraw(@PathVariable Long id, @RequestParam double value) {
+        log.info("Value of withdraw: " + value);
 
         if (value < 0) return ResponseEntity.badRequest().build();
 
